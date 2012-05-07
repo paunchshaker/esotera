@@ -13,6 +13,8 @@ class Game:
 
         #initialize the window
         libtcod.console_init_root(Game.SCREEN_WIDTH, Game.SCREEN_HEIGHT, title, False)
+        #set up a buffer console to draw to
+        self.con = libtcod.console_new(Game.SCREEN_WIDTH, Game.SCREEN_HEIGHT)
         libtcod.sys_set_fps(Game.LIMIT_FPS)
     
     def new_game(self):
@@ -21,14 +23,16 @@ class Game:
 
     def start(self):
         while not libtcod.console_is_window_closed():
-            libtcod.console_set_foreground_color(0, libtcod.white)
+            libtcod.console_set_foreground_color(self.con, libtcod.white)
 
-            libtcod.console_print_left(0, self.player.x, self.player.y, libtcod.BKGND_NONE, '@')
+            libtcod.console_print_left(self.con, self.player.x, self.player.y, libtcod.BKGND_NONE, '@')
             
+            #blit the offscreen buffer
+            libtcod.console_blit(self.con, 0, 0, Game.SCREEN_WIDTH, Game.SCREEN_HEIGHT, 0, 0, 0)
             libtcod.console_flush()
            
             #clear player character
-            libtcod.console_print_left(0, self.player.x, self.player.y, libtcod.BKGND_NONE, ' ')
+            libtcod.console_print_left(self.con, self.player.x, self.player.y, libtcod.BKGND_NONE, ' ')
             #handle user input
             exit = self._handle_keys()
             if exit:
