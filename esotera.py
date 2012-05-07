@@ -1,5 +1,5 @@
 import libtcodpy as libtcod
-from Player import Player
+from Object import Object
 
 class Game:
     """The Esotera game engine"""
@@ -18,21 +18,24 @@ class Game:
         libtcod.sys_set_fps(Game.LIMIT_FPS)
     
     def new_game(self):
-        self.player = Player(Game.SCREEN_WIDTH/2, Game.SCREEN_HEIGHT/2)
+        self.player = Object(self,Game.SCREEN_WIDTH/2, Game.SCREEN_HEIGHT/2, '@', libtcod.white)
+        self.npc = Object(self,Game.SCREEN_WIDTH/2 - 5, Game.SCREEN_HEIGHT/2, '@', libtcod.yellow)
+        self.game_objects = [self.player, self.npc]
+
         self.start()
 
     def start(self):
         while not libtcod.console_is_window_closed():
-            libtcod.console_set_foreground_color(self.con, libtcod.white)
-
-            libtcod.console_print_left(self.con, self.player.x, self.player.y, libtcod.BKGND_NONE, '@')
+            for object in self.game_objects:
+                object.draw()
             
             #blit the offscreen buffer
             libtcod.console_blit(self.con, 0, 0, Game.SCREEN_WIDTH, Game.SCREEN_HEIGHT, 0, 0, 0)
             libtcod.console_flush()
            
-            #clear player character
-            libtcod.console_print_left(self.con, self.player.x, self.player.y, libtcod.BKGND_NONE, ' ')
+            for object in self.game_objects:
+                object.clear()
+
             #handle user input
             exit = self._handle_keys()
             if exit:
@@ -50,16 +53,16 @@ class Game:
         
         #movement keys
         if libtcod.console_is_key_pressed(libtcod.KEY_UP):
-            self.player.y -= 1
+            self.player.move(0,-1)
  
         elif libtcod.console_is_key_pressed(libtcod.KEY_DOWN):
-            self.player.y += 1
+            self.player.move(0,1)
  
         elif libtcod.console_is_key_pressed(libtcod.KEY_LEFT):
-            self.player.x -= 1
+            self.player.move(-1,0)
  
         elif libtcod.console_is_key_pressed(libtcod.KEY_RIGHT):
-            self.player.x += 1
+            self.player.move(1,0)
 
 
 #Start the game here
