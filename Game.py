@@ -16,6 +16,13 @@ class Game:
     FOV_LIGHT_WALLS = True
     TORCH_RADIUS = 10
 
+    PLAYING = 1
+    EXIT = 2
+
+    DIDNT_TAKE_TURN = 1
+
+    
+
     def __init__(self,title):
         #set up a custom font
         libtcod.console_set_custom_font('arial10x10.png', libtcod.FONT_TYPE_GREYSCALE | libtcod.FONT_LAYOUT_TCOD)
@@ -42,6 +49,8 @@ class Game:
         self.start()
 
     def start(self):
+        self.player_action = None
+        self.game_state = Game.PLAYING
         while not libtcod.console_is_window_closed():
             self._render_all()
             libtcod.console_flush()
@@ -50,9 +59,14 @@ class Game:
                 object.clear(self.con)
 
             #handle user input
-            exit = self._handle_keys()
-            if exit:
-                return
+            self.player_action = self._handle_keys()
+                #let monsters take their turn
+            if self.game_state == Game.PLAYING and self.player_action != Game.DIDNT_TAKE_TURN:
+                for object in self.game_objects:
+                    if object != self.player:
+                        print 'The ' + object.name + ' growls!'
+            if self.player_action == Game.EXIT:
+                break
 
     def _render_all(self):
         for object in self.game_objects:
@@ -78,22 +92,25 @@ class Game:
             libtcod.console_set_fullscreen(not libtcod.console_is_fullscreen())
  
         elif key.vk == libtcod.KEY_ESCAPE:
-            return True
+            return Game.EXIT
         
         #movement keys
-        if libtcod.console_is_key_pressed(libtcod.KEY_UP):
-            self.player.move(self.current_map,0,-1)
-            self.fov_recompute = True
+        if self.game_state == Game.PLAYING:
+            if libtcod.console_is_key_pressed(libtcod.KEY_UP):
+                self.player.move(self.current_map,0,-1)
+                self.fov_recompute = True
  
-        elif libtcod.console_is_key_pressed(libtcod.KEY_DOWN):
-            self.player.move(self.current_map,0,1)
-            self.fov_recompute = True
+            elif libtcod.console_is_key_pressed(libtcod.KEY_DOWN):
+                self.player.move(self.current_map,0,1)
+                self.fov_recompute = True
  
-        elif libtcod.console_is_key_pressed(libtcod.KEY_LEFT):
-            self.player.move(self.current_map,-1,0)
-            self.fov_recompute = True
+            elif libtcod.console_is_key_pressed(libtcod.KEY_LEFT):
+                self.player.move(self.current_map,-1,0)
+                self.fov_recompute = True
  
-        elif libtcod.console_is_key_pressed(libtcod.KEY_RIGHT):
-            self.player.move(self.current_map,1,0)
-            self.fov_recompute = True
+            elif libtcod.console_is_key_pressed(libtcod.KEY_RIGHT):
+                self.player.move(self.current_map,1,0)
+                self.fov_recompute = True
+            else:
+                return Game.DIDNT_TAKE_TURN
 
