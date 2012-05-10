@@ -30,7 +30,10 @@ class Tile:
 class Map:
     #define colors here. Seems silly.
     color_dark_wall = libtcod.Color(0, 0, 100)
+    color_light_wall = libtcod.Color(130, 110, 50)
     color_dark_ground = libtcod.Color(50, 50, 150)
+    color_light_ground = libtcod.Color(200, 180, 50)
+
     
     def __init__(self, width, height):
         self.width = width
@@ -44,11 +47,22 @@ class Map:
         return self.tile[key]
 
 
-    def draw(self, con):
+    def draw(self, con, fov_map):
         for y in range(self.height):
             for x in range(self.width):
                 wall = self[x][y].block_sight
-                if wall:
-                    libtcod.console_set_back(con, x, y, Map.color_dark_wall, libtcod.BKGND_SET )
+                visible = libtcod.map_is_in_fov(fov_map, x, y)
+                if not visible:
+                    #it's out of the field of view
+                    if wall:
+                        libtcod.console_set_back(con, x, y, Map.color_dark_wall, libtcod.BKGND_SET )
+                    else:
+                        libtcod.console_set_back(con, x, y, Map.color_dark_ground, libtcod.BKGND_SET )
                 else:
-                    libtcod.console_set_back(con, x, y, Map.color_dark_ground, libtcod.BKGND_SET )
+                    #it's visible
+                    if wall:
+                        libtcod.console_set_back(con, x, y, Map.color_light_wall, libtcod.BKGND_SET )
+                    else:
+                        libtcod.console_set_back(con, x, y, Map.color_light_ground, libtcod.BKGND_SET )
+
+

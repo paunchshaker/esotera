@@ -15,10 +15,11 @@ class Object:
             self.x += dx
             self.y += dy
  
-    def draw(self, con):
+    def draw(self, con, fov_map):
         #set the color and then draw the character that represents this object at its position
-        libtcod.console_set_foreground_color(con, self.color)
-        libtcod.console_put_char(con, self.x, self.y, self.char, libtcod.BKGND_NONE)
+        if libtcod.map_is_in_fov(fov_map, self.x, self.y):
+            libtcod.console_set_foreground_color(con, self.color)
+            libtcod.console_put_char(con, self.x, self.y, self.char, libtcod.BKGND_NONE)
  
     def clear(self, con):
         #erase the character that represents this object

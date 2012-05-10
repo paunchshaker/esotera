@@ -12,6 +12,10 @@ class Game:
     MAP_WIDTH = 80
     MAP_HEIGHT = 45
 
+    FOV_ALGO = 0  #default FOV algorithm
+    FOV_LIGHT_WALLS = True
+    TORCH_RADIUS = 10
+
     def __init__(self,title):
         #set up a custom font
         libtcod.console_set_custom_font('arial10x10.png', libtcod.FONT_TYPE_GREYSCALE | libtcod.FONT_LAYOUT_TCOD)
@@ -24,6 +28,14 @@ class Game:
     
     def new_game(self):
         self.current_map = Dungeon(Game.MAP_WIDTH, Game.MAP_HEIGHT)
+
+        #initialize the field of view
+        self.fov_map = libtcod.map_new(Game.MAP_WIDTH, Game.MAP_HEIGHT)
+        for y in range(Game.MAP_HEIGHT):
+            for x in range(Game.MAP_WIDTH):
+                libtcod.map_set_properties(self.fov_map, x, y, not self.current_map[x][y].block_sight, not self.current_map[x][y].blocked)
+        self.fov_recompute = True
+
         self.player = Object(self.current_map.player_start_x, self.current_map.player_start_y, '@', libtcod.white)
         self.npc = Object(Game.SCREEN_WIDTH/2 - 5, Game.SCREEN_HEIGHT/2, '@', libtcod.yellow)
         self.game_objects = [self.player, self.npc]
@@ -44,12 +56,17 @@ class Game:
 
     def _render_all(self):
         for object in self.game_objects:
-            object.draw(self.con)
+            object.draw(self.con, self.fov_map)
 
-            #draw the map
-        self.current_map.draw(self.con)
+        if self.fov_recompute:
+            #recompute FOV if needed (the player moved or something)
+            self.fov_recompute = False
+            libtcod.map_compute_fov(self.fov_map, self.player.x, self.player.y, Game.TORCH_RADIUS, Game.FOV_LIGHT_WALLS, Game.FOV_ALGO)
 
-            #blit the offscreen buffer
+        #draw the map
+        self.current_map.draw(self.con, self.fov_map)
+
+        #blit the offscreen buffer
         libtcod.console_blit(self.con, 0, 0, Game.SCREEN_WIDTH, Game.SCREEN_HEIGHT, 0, 0, 0)
 
 
@@ -66,13 +83,17 @@ class Game:
         #movement keys
         if libtcod.console_is_key_pressed(libtcod.KEY_UP):
             self.player.move(self.current_map,0,-1)
+            self.fov_recompute = True
  
         elif libtcod.console_is_key_pressed(libtcod.KEY_DOWN):
             self.player.move(self.current_map,0,1)
+            self.fov_recompute = True
  
         elif libtcod.console_is_key_pressed(libtcod.KEY_LEFT):
             self.player.move(self.current_map,-1,0)
+            self.fov_recompute = True
  
         elif libtcod.console_is_key_pressed(libtcod.KEY_RIGHT):
             self.player.move(self.current_map,1,0)
+            self.fov_recompute = True
 
