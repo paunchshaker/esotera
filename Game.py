@@ -1,6 +1,7 @@
 import libtcodpy as libtcod
 from Object import Object
 from Map import Map
+from Dungeon import Dungeon
 
 class Game:
     """The Esotera game engine"""
@@ -22,10 +23,10 @@ class Game:
         libtcod.sys_set_fps(Game.LIMIT_FPS)
     
     def new_game(self):
-        self.player = Object(Game.SCREEN_WIDTH/2, Game.SCREEN_HEIGHT/2, '@', libtcod.white)
+        self.current_map = Dungeon(Game.MAP_WIDTH, Game.MAP_HEIGHT)
+        self.player = Object(self.current_map.player_start_x, self.current_map.player_start_y, '@', libtcod.white)
         self.npc = Object(Game.SCREEN_WIDTH/2 - 5, Game.SCREEN_HEIGHT/2, '@', libtcod.yellow)
         self.game_objects = [self.player, self.npc]
-        self.current_map = Map(Game.MAP_WIDTH, Game.MAP_HEIGHT)
         self.start()
 
     def start(self):
