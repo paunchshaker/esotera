@@ -27,7 +27,10 @@ class Game:
         libtcod.sys_set_fps(Game.LIMIT_FPS)
     
     def new_game(self):
-        self.current_map = Dungeon(Game.MAP_WIDTH, Game.MAP_HEIGHT)
+        self.player = Object(0,0, '@', 'player', libtcod.white, blocks=True)
+        self.game_objects = [self.player]
+        self.current_map = Dungeon(self, Game.MAP_WIDTH, Game.MAP_HEIGHT)
+        (self.player.x, self.player.y) = (self.current_map.player_start_x, self.current_map.player_start_y)
 
         #initialize the field of view
         self.fov_map = libtcod.map_new(Game.MAP_WIDTH, Game.MAP_HEIGHT)
@@ -36,9 +39,6 @@ class Game:
                 libtcod.map_set_properties(self.fov_map, x, y, not self.current_map[x][y].block_sight, not self.current_map[x][y].blocked)
         self.fov_recompute = True
 
-        self.player = Object(self.current_map.player_start_x, self.current_map.player_start_y, '@', libtcod.white)
-        self.npc = Object(Game.SCREEN_WIDTH/2 - 5, Game.SCREEN_HEIGHT/2, '@', libtcod.yellow)
-        self.game_objects = [self.player, self.npc]
         self.start()
 
     def start(self):

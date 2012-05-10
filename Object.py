@@ -3,14 +3,16 @@ import libtcodpy as libtcod
 class Object:
     #this is a generic object: the player, a monster, an item, the stairs...
     #it's always represented by a character on screen.
-    def __init__(self, x, y, char, color):
+    def __init__(self, x, y, char, name, color, blocks=False):
         self.x = x
         self.y = y
         self.char = char
         self.color = color
+        self.name = name
+        self.blocks = blocks
  
     def move(self, map, dx, dy):
-        if not map[self.x + dx][self.y + dy].blocked:
+        if not map.is_blocked(self.x + dx, self.y + dy):
             #move by the given amount
             self.x += dx
             self.y += dy

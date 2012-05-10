@@ -1,5 +1,6 @@
 from Map import Map
 from Map import Rect
+from Object import Object
 import libtcodpy as libtcod
 
 class Dungeon(Map):
@@ -7,9 +8,10 @@ class Dungeon(Map):
     ROOM_MAX_SIZE = 10
     ROOM_MIN_SIZE = 6
     MAX_ROOMS = 30
+    MAX_ROOM_MONSTERS = 3
     
-    def __init__(self, width, height):
-        Map.__init__(self, width, height)
+    def __init__(self, game, width, height):
+        Map.__init__(self, game, width, height)
         #TODO add code that takes in players position and seeds dungeon from that start point
         rooms = []
         num_rooms = 0
@@ -37,6 +39,7 @@ class Dungeon(Map):
  
                     #"paint" it to the map's tiles
                 self.create_room(new_room)
+                self.place_objects(new_room)
  
                 #center coordinates of new room, will be useful later
                 (new_x, new_y) = new_room.center()
@@ -67,6 +70,7 @@ class Dungeon(Map):
                 num_rooms += 1
 
         self.rooms = rooms
+        self.num_rooms = num_rooms
 
     def create_room(self, room):
         for x in range(room.x1 + 1, room.x2):
@@ -84,6 +88,25 @@ class Dungeon(Map):
         for y in range(min(y1, y2), max(y1, y2) + 1):
             self[x][y].blocked = False
             self[x][y].block_sight = False
+
+    def place_objects(self, room):
+        #choose random number of monsters
+        num_monsters = libtcod.random_get_int(0, 0, Dungeon.MAX_ROOM_MONSTERS)
+ 
+        for i in range(num_monsters):
+            #choose random spot for this monster
+            x = libtcod.random_get_int(0, room.x1, room.x2)
+            y = libtcod.random_get_int(0, room.y1, room.y2)
+            if not self.is_blocked(x,y):
+                if libtcod.random_get_int(0, 0, 100) < 80:  #80% chance of getting an orc
+                    #create an orc
+                    monster = Object(x, y, 'o', 'orc', libtcod.desaturated_green, blocks = True)
+                else:
+                    #create a troll
+                    monster = Object(x, y, 'T', 'troll', libtcod.darker_green, blocks = True)
+
+                self.game.game_objects.append(monster)
+
 
 
     

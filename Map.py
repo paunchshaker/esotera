@@ -36,7 +36,8 @@ class Map:
     color_light_ground = libtcod.Color(200, 180, 50)
 
     
-    def __init__(self, width, height):
+    def __init__(self, game, width, height):
+        self.game = game
         self.width = width
         self.height = height
         self.tile = [[ Tile(True)
@@ -67,5 +68,17 @@ class Map:
                     else:
                         libtcod.console_set_back(con, x, y, Map.color_light_ground, libtcod.BKGND_SET )
                     self[x][y].explored = True
+
+    def is_blocked(self, x, y):
+        #first test the map tile
+        if self[x][y].blocked:
+            return True
+ 
+        #now check for any blocking objects
+        for object in self.game.game_objects:
+            if object.blocks and object.x == x and object.y == y:
+                return True
+        return False
+
 
 
