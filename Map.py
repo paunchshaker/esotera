@@ -26,6 +26,7 @@ class Tile:
         #by default, if a tile is blocked, it also blocks sight
         if block_sight is None: block_sight = blocked
         self.block_sight = block_sight
+        self.explored = False
 
 class Map:
     #define colors here. Seems silly.
@@ -54,15 +55,17 @@ class Map:
                 visible = libtcod.map_is_in_fov(fov_map, x, y)
                 if not visible:
                     #it's out of the field of view
-                    if wall:
-                        libtcod.console_set_back(con, x, y, Map.color_dark_wall, libtcod.BKGND_SET )
-                    else:
-                        libtcod.console_set_back(con, x, y, Map.color_dark_ground, libtcod.BKGND_SET )
+                    if self[x][y].explored:
+                        if wall:
+                            libtcod.console_set_back(con, x, y, Map.color_dark_wall, libtcod.BKGND_SET )
+                        else:
+                            libtcod.console_set_back(con, x, y, Map.color_dark_ground, libtcod.BKGND_SET )
                 else:
                     #it's visible
                     if wall:
                         libtcod.console_set_back(con, x, y, Map.color_light_wall, libtcod.BKGND_SET )
                     else:
                         libtcod.console_set_back(con, x, y, Map.color_light_ground, libtcod.BKGND_SET )
+                    self[x][y].explored = True
 
 
