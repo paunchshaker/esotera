@@ -97,20 +97,36 @@ class Game:
         #movement keys
         if self.game_state == Game.PLAYING:
             if libtcod.console_is_key_pressed(libtcod.KEY_UP):
-                self.player.move(self.current_map,0,-1)
-                self.fov_recompute = True
+                self._player_move_or_attack(0,-1)
  
             elif libtcod.console_is_key_pressed(libtcod.KEY_DOWN):
-                self.player.move(self.current_map,0,1)
-                self.fov_recompute = True
+                self._player_move_or_attack(0,1)
  
             elif libtcod.console_is_key_pressed(libtcod.KEY_LEFT):
-                self.player.move(self.current_map,-1,0)
-                self.fov_recompute = True
+                self._player_move_or_attack(-1,0)
  
             elif libtcod.console_is_key_pressed(libtcod.KEY_RIGHT):
-                self.player.move(self.current_map,1,0)
-                self.fov_recompute = True
+                self._player_move_or_attack(1,0)
             else:
                 return Game.DIDNT_TAKE_TURN
+
+    def _player_move_or_attack(self,dx,dy):
+ 
+       #the coordinates the player is moving to/attacking
+       x = self.player.x + dx
+       y = self.player.y + dy
+ 
+       #try to find an attackable object there
+       target = None
+       for object in self.game_objects:
+           if object.x == x and object.y == y:
+               target = object
+               break
+ 
+       #attack if target found, move otherwise
+       if target is not None:
+           print 'The ' + target.name + ' laughs at your puny efforts to attack him!'
+       else:
+           self.player.move(self.current_map,dx, dy)
+           self.fov_recompute = True
 
