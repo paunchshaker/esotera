@@ -2,6 +2,8 @@ from Map import Map
 from Map import Rect
 from Object import Object
 import libtcodpy as libtcod
+from Phenotype import Phenotype
+from BasicMonsterAI import BasicMonsterAI
 
 class Dungeon(Map):
     #constants
@@ -100,10 +102,14 @@ class Dungeon(Map):
             if not self.is_blocked(x,y):
                 if libtcod.random_get_int(0, 0, 100) < 80:  #80% chance of getting an orc
                     #create an orc
-                    monster = Object(x, y, 'o', 'orc', libtcod.desaturated_green, blocks = True)
+                    orc = Phenotype(hp=10, defense=0, power=3)
+                    orc_ai = BasicMonsterAI()
+                    monster = Object(x, y, 'o', 'orc', libtcod.desaturated_green, blocks = True, phenotype=orc, ai = orc_ai)
                 else:
                     #create a troll
-                    monster = Object(x, y, 'T', 'troll', libtcod.darker_green, blocks = True)
+                    troll = Phenotype(hp=16, defense=1, power=4)
+                    troll_ai = BasicMonsterAI()
+                    monster = Object(x, y, 'T', 'troll', libtcod.darker_green, blocks = True, phenotype=troll, ai = troll_ai)
 
                 self.game.game_objects.append(monster)
 

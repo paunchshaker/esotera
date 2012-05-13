@@ -3,13 +3,23 @@ import libtcodpy as libtcod
 class Object:
     #this is a generic object: the player, a monster, an item, the stairs...
     #it's always represented by a character on screen.
-    def __init__(self, x, y, char, name, color, blocks=False):
+    def __init__(self, x, y, char, name, color, blocks=False, phenotype=None, ai=None):
         self.x = x
         self.y = y
         self.char = char
         self.color = color
         self.name = name
         self.blocks = blocks
+
+        #components go here
+        #each component has a property owner that gets set upon assignment
+        self.phenotype = phenotype
+        if self.phenotype:
+            self.phenotype.owner = self
+ 
+        self.ai = ai
+        if self.ai:
+            self.ai.owner = self
  
     def move(self, map, dx, dy):
         if not map.is_blocked(self.x + dx, self.y + dy):

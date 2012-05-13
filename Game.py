@@ -2,6 +2,8 @@ import libtcodpy as libtcod
 from Object import Object
 from Map import Map
 from Dungeon import Dungeon
+from Phenotype import Phenotype
+
 
 class Game:
     """The Esotera game engine"""
@@ -34,7 +36,8 @@ class Game:
         libtcod.sys_set_fps(Game.LIMIT_FPS)
     
     def new_game(self):
-        self.player = Object(0,0, '@', 'player', libtcod.white, blocks=True)
+        player_pheno = Phenotype(hp=30, defense=2, power=5)
+        self.player = Object(0,0, '@', 'player', libtcod.white, blocks=True, phenotype = player_pheno)
         self.game_objects = [self.player]
         self.current_map = Dungeon(self, Game.MAP_WIDTH, Game.MAP_HEIGHT)
         (self.player.x, self.player.y) = (self.current_map.player_start_x, self.current_map.player_start_y)
