@@ -7,10 +7,12 @@ class Event:
     """
 
     def __init__(self, source, targets = None):
+        """Default constructor for a new Event"""
         self.source = source
         self.targets = targets
 
     def __str__(self):
+        """Convey the Event as a statement in english."""
         target_strings = 'nothing'
         if self.targets:
             target_strings = ', '.join(self.targets)
