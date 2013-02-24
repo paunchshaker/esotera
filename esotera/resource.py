@@ -4,4 +4,11 @@ class Resource:
     def __init__(self,type,quantity):
         self.type = type
         self.quantity = quantity
-
+    def __add__(self,other):
+        if isinstance(other,Resource):
+            value = other
+            if other.type == self.type:
+                value = other.quantity
+            else:
+                raise TypeError
+        return Resource(self.type,self.quantity + value)
