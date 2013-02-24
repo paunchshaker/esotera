@@ -18,10 +18,6 @@ class TestEvent(TestCase):
         res1 = Resource('food',1)
         sum = res1 + 1
         self.assertEqual(sum.quantity, 2)
-    def test_numeric_raddition(self):
-        res1 = Resource('food',1)
-        sum = 1 + res1 
-        self.assertEqual(sum.quantity, 2)
     def test_subtraction(self):
         res1 = Resource('food',1)
         res2 = Resource('food',1)
@@ -30,10 +26,6 @@ class TestEvent(TestCase):
     def test_numeric_subtraction(self):
         res1 = Resource('food',1)
         sum = res1 - 1
-        self.assertEqual(sum.quantity, 0)
-    def test_numeric_rsubtraction(self):
-        res1 = Resource('food',1)
-        sum = 0 - res1 
         self.assertEqual(sum.quantity, 0)
     def test_multiplication(self):
         res1 = Resource('food',1)
