@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from Game import Game
 
 #Start the game here
