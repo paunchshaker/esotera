@@ -32,7 +32,16 @@ class TestEvent(TestCase):
         res2 = Resource('food',1)
         result = res1 * res2
         self.assertEqual(result.quantity, 1)
+    def test_numeric_multiplication(self):
+        res1 = Resource('food',1)
+        result = res1 * 2
+        self.assertEqual(result.quantity, 2)
     def test_floordivision(self):
+        res1 = Resource('food',1)
+        res2 = Resource('food',2)
+        sum = res1 // res2
+        self.assertEqual(sum.quantity, 0)
+    def test_numeric_floordivision(self):
         res1 = Resource('food',1)
         sum = res1 // 2
         self.assertEqual(sum.quantity, 0)
