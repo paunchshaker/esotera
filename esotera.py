@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-from Game import Game
+from esotera.game import Game
 
 #Start the game here
-esotera = Game('Esotera Demo')
+esotera = Game()
 esotera.new_game()
 

@@ -2,7 +2,7 @@
 """Unit tests for the Event class"""
 
 from unittest import TestCase
-from event import Event 
+from esotera.event import Event 
 
 class TestEvent(TestCase):
     def test_creation_with_no_targets(self):
