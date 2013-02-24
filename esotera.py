@@ -2,7 +2,10 @@
 
 from esotera.game import Game
 
-#Start the game here
-esotera = Game()
-esotera.new_game()
+def main():
+    #Start the game here
+    esotera = Game()
+    esotera.new_game()
 
+if __name__ == '__main__':
+        main()
