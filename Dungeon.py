@@ -5,6 +5,27 @@ import libtcodpy as libtcod
 from Phenotype import Phenotype
 from BasicMonsterAI import BasicMonsterAI
 
+#some fun death functions these should be elsewhere
+def player_death(player):
+    #the game ended!
+    print 'You died!'
+    game_state = 'dead'
+ 
+    #for added effect, transform the player into a corpse!
+    player.char = '%'
+    player.color = libtcod.dark_red
+
+def monster_death(monster):
+    #transform it into a nasty corpse! it doesn't block, can't be
+    #attacked and doesn't move
+    print monster.name.capitalize() + ' is dead!'
+    monster.char = '%'
+    monster.color = libtcod.dark_red
+    monster.blocks = False
+    monster.fighter = None
+    monster.ai = None
+    monster.name = 'remains of ' + monster.name
+
 class Dungeon(Map):
     #constants
     ROOM_MAX_SIZE = 10

@@ -66,10 +66,15 @@ class Game:
                 #let monsters take their turn
             if self.game_state == Game.PLAYING and self.player_action != Game.DIDNT_TAKE_TURN:
                 for object in self.game_objects:
-                    if object != self.player:
-                        print 'The ' + object.name + ' growls!'
+                    if object.ai:
+                        object.ai.take_turn(self.player,self.current_map,self.fov_map)
             if self.player_action == Game.EXIT:
                 break
+            
+        #show the player's stats
+        libtcod.console_set_foreground_color(self.con, libtcod.white)
+        libtcod.console_print_left(0, 1, Game.SCREEN_HEIGHT - 2, libtcod.BKGND_NONE,
+        'HP: ' + str(self.player.phenotype.hp) + '/' + str(player.phenotype.max_hp))
 
     def _render_all(self):
         for object in self.game_objects:
@@ -128,7 +133,7 @@ class Game:
  
        #attack if target found, move otherwise
        if target is not None:
-           print 'The ' + target.name + ' laughs at your puny efforts to attack him!'
+           self.player.phenotype.attack(target)
        else:
            self.player.move(self.current_map,dx, dy)
            self.fov_recompute = True

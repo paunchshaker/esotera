@@ -38,6 +38,7 @@ class Map:
     
     def __init__(self, game, width, height):
         self.game = game
+        self.objects = game.game_objects    #prepare for having this be primarily the domain of the map
         self.width = width
         self.height = height
         self.tile = [[ Tile(True)

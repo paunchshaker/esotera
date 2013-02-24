@@ -1,4 +1,5 @@
 import libtcodpy as libtcod
+import math
 
 class Object:
     #this is a generic object: the player, a monster, an item, the stairs...
@@ -36,3 +37,21 @@ class Object:
     def clear(self, con):
         #erase the character that represents this object
         libtcod.console_put_char(con, self.x, self.y, ' ', libtcod.BKGND_NONE)
+
+    def move_towards(self, map, target_x, target_y):
+        #vector from this object to the target, and distance
+        dx = target_x - self.x
+        dy = target_y - self.y
+        distance = math.sqrt(dx ** 2 + dy ** 2)
+ 
+        #normalize it to length 1 (preserving direction), then round it and
+        #convert to integer so the movement is restricted to the map grid
+        dx = int(round(dx / distance))
+        dy = int(round(dy / distance))
+        self.move(move, dx, dy)
+
+    def distance_to(self, other):
+        #return the distance to another object
+        dx = other.x - self.x
+        dy = other.y - self.y
+        return math.sqrt(dx ** 2 + dy ** 2)
