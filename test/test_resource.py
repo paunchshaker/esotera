@@ -40,9 +40,9 @@ class TestEvent(TestCase):
         res2 = Resource('food',1)
         result = res1 * res2
         self.assertEqual(result.quantity, 1)
-    def test_division(self):
+    def test_floordivision(self):
         res1 = Resource('food',1)
-        sum = res1 / 2
+        sum = res1 // 2
         self.assertEqual(sum.quantity, 0)
     def test_add_type_incompatibility(self):
         res1 = Resource('food',1)

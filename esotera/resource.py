@@ -5,8 +5,8 @@ class Resource:
         self.type = type
         self.quantity = quantity
     def __add__(self,other):
+        value = other
         if isinstance(other,Resource):
-            value = other
             if other.type == self.type:
                 value = other.quantity
             else:
