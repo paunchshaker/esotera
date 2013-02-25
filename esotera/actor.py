@@ -11,8 +11,15 @@ class Actor:
             Actor.number += 1
             self.name = "Actor" + str(Actor.number)
     def offer(self, target, give, receive):
-        pass
+        accepts = target.accept(source = self, give = receive, receive = give)
+        if accepts:
+            self.exchange(target = target, give = give, receive = receive)
+        else:
+            #offer rejected, update AI accordingly
+            pass
     def exchange(self, target, give, receive):
+        #exchange resources here
         pass
     def accept(self, source, give, receive):
+        #go through AI to make decision, update AI here
         pass
