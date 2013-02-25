@@ -14,19 +14,37 @@ class TestEvent(TestCase):
         res2 = Resource('food',1)
         sum = res1 + res2
         self.assertEqual(sum.quantity, 2)
+    def test_iaddition(self):
+        res1 = Resource('food',1)
+        res2 = Resource('food',1)
+        res1 += res2
+        self.assertEqual(res1.quantity, 2)
     def test_numeric_addition(self):
         res1 = Resource('food',1)
         sum = res1 + 1
         self.assertEqual(sum.quantity, 2)
+    def test_numeric_iaddition(self):
+        res1 = Resource('food',1)
+        res1 += 1
+        self.assertEqual(res1.quantity, 2)
     def test_subtraction(self):
         res1 = Resource('food',1)
         res2 = Resource('food',1)
         sum = res1 - res2
         self.assertEqual(sum.quantity, 0)
+    def test_isubtraction(self):
+        res1 = Resource('food',1)
+        res2 = Resource('food',1)
+        res1 -= res2
+        self.assertEqual(res1.quantity, 0)
     def test_numeric_subtraction(self):
         res1 = Resource('food',1)
         sum = res1 - 1
         self.assertEqual(sum.quantity, 0)
+    def test_numeric_isubtraction(self):
+        res1 = Resource('food',1)
+        res1 -= 1
+        self.assertEqual(res1.quantity, 0)
     def test_multiplication(self):
         res1 = Resource('food',1)
         res2 = Resource('food',1)
@@ -50,11 +68,21 @@ class TestEvent(TestCase):
         res2 = Resource('mate',1)
         with self.assertRaises(TypeError):
             res1 + res2
+    def test_iadd_type_incompatibility(self):
+        res1 = Resource('food',1)
+        res2 = Resource('mate',1)
+        with self.assertRaises(TypeError):
+            res1 += res2
     def test_sub_type_incompatibility(self):
         res1 = Resource('food',1)
         res2 = Resource('mate',1)
         with self.assertRaises(TypeError):
             res1 - res2
+    def test_isub_type_incompatibility(self):
+        res1 = Resource('food',1)
+        res2 = Resource('mate',1)
+        with self.assertRaises(TypeError):
+            res1 -= res2
     def test_mul_type_incompatibility(self):
         res1 = Resource('food',1)
         res2 = Resource('mate',1)

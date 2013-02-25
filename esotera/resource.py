@@ -12,6 +12,15 @@ class Resource:
             else:
                 raise TypeError
         return Resource(self.type,self.quantity + value)
+    def __iadd__(self,other):
+        value = other
+        if isinstance(other,Resource):
+            if other.type == self.type:
+                value = other.quantity
+            else:
+                raise TypeError
+        self.quantity = self.quantity + value
+        return self
     def __sub__(self,other):
         value = other
         if isinstance(other,Resource):
@@ -21,6 +30,16 @@ class Resource:
                 raise TypeError
         #Note that this allows negative resource quantities. Do we want to do this? It could be useful.
         return Resource(self.type,self.quantity - value)
+    def __isub__(self,other):
+        value = other
+        if isinstance(other,Resource):
+            if other.type == self.type:
+                value = other.quantity
+            else:
+                raise TypeError
+        #Note that this allows negative resource quantities. Do we want to do this? It could be useful.
+        self.quantity = self.quantity - value
+        return self
     def __mul__(self,other):
         value = other
         if isinstance(other,Resource):
