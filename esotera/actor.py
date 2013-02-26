@@ -1,16 +1,19 @@
+import random
+
 class Actor:
     """The actor class is the base class for entities that can perform actions. They are not necessarily organic (i.e. they might represent political, religious or social bodies)."""
     
     #class variables
     number = 0
 
-    def __init__(self, name = None):
+    def __init__(self, name = None, resources = dict()):
         """Initialize a new Actor."""
         if name:
             self.name = name
         else:
             Actor.number += 1
             self.name = "Actor" + str(Actor.number)
+        self.resources = dict(resources)
     def offer(self, target, give, receive):
         """Offer an exchange (possibly one-sided) of resources."""
         accepts = target.accept(source = self, give = receive, receive = give)
@@ -26,4 +29,5 @@ class Actor:
     def accept(self, source, give, receive):
         """Decide whether to accept or reject an offer"""
         #go through AI to make decision, update AI here
-        pass
+        #for now just make a random choice
+        return bool(random.randrange(2))

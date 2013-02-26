@@ -13,9 +13,14 @@ class TestEvent(TestCase):
         self.money = Resource('money', 25)
     def test_creation_with_no_name(self):
         self.assertNotEqual(self.actor1.name, None)
+        self.assertFalse(self.actor1.resources)
     def test_creation_with_name(self):
-        actor = Actor('Cleese')
         self.assertEqual(self.actor2.name, 'Cleese')
+        self.assertFalse(self.actor2.resources)
+    def test_creation_with_name_and_resources(self):
+        resources = {self.food.kind : self.food}
+        actor = Actor('Cleese', resources)
+        self.assertDictEqual(actor.resources, resources)
     def test_offer(self):
         self.actor1.offer(target = self.actor1, give = self.money, receive = self.food) 
     def test_request(self):
