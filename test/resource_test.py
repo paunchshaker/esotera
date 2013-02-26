@@ -7,7 +7,7 @@ from esotera.resource import Resource
 class TestEvent(TestCase):
     def test_creation(self):
         resource = Resource('food',10)
-        self.assertEqual(resource.type,'food')
+        self.assertEqual(resource.kind,'food')
         self.assertEqual(resource.quantity, 10)
     def test_addition(self):
         res1 = Resource('food',1)
