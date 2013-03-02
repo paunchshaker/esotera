@@ -24,5 +24,5 @@ class Game:
             self.turn += 1
             for actor in self.actors:
                 actor.take_turn()
-            print("Turn {0} complete!",str(self.turn))
+            print("Turn {0} complete!".format(str(self.turn)))
 
