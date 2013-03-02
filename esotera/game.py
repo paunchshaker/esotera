@@ -11,6 +11,7 @@ class Game:
         self.event_queue = deque() 
         self.actors = list()
         self.resources = list()
+        self.turn = 0
     
     def new_game(self, number_actors = 5, number_turns = 10):
         """Populates the game world and start the game"""

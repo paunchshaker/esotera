@@ -31,7 +31,7 @@ class Actor:
             try:
                 self.resources[give.kind] -= give
             except KeyError:
-                self.resources[give.kind] = Resource(give.kind,0)
+                self.resources[give.kind] = Resource(give.kind, 0)
                 self.resources[give.kind] -= give
             try:
                 target.resources[give.kind] += give
@@ -45,7 +45,7 @@ class Actor:
             try:
                 target.resources[receive.kind] -= receive
             except KeyError:
-                target.resources[receive.kind] = Resource(receive.kind,0)
+                target.resources[receive.kind] = Resource(receive.kind, 0)
                 target.resources[receive.kind] -= receive
     def accept(self, source, give, receive):
         """Decide whether to accept or reject an offer"""
@@ -53,4 +53,5 @@ class Actor:
         #for now just make a random choice
         return bool(random.randrange(2))
     def take_turn(self):
+        """Take a turn in the Game"""
         print("{0} abides.".format(self.name))
