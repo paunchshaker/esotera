@@ -3,9 +3,11 @@ import copy
 from esotera.resource import Resource
 
 class Actor:
-    """The actor class is the base class for entities that can perform actions. They are not necessarily organic (i.e. they might represent political, religious or social bodies)."""
+    """The actor class is the base class for entities that can perform actions.
+    They are not necessarily organic (i.e. they might represent political,
+            religious or social bodies)."""
     
-    #class variables
+    #class variables 
     number = 0
 
     def __init__(self, name = None, resources = dict()):
