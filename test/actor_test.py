@@ -29,6 +29,10 @@ class TestEvent(TestCase):
         self.actor1.offer(target = self.actor2, give = self.food, receive = None) 
     def test_exchange(self):
        self.actor1.exchange(target = self.actor2, receive = self.money, give = self.food)
+       self.assertEqual(self.actor1.resources[self.money.kind].quantity, 25)
+       self.assertEqual(self.actor1.resources[self.food.kind].quantity, -5)
+       self.assertEqual(self.actor2.resources[self.money.kind].quantity, -25)
+       self.assertEqual(self.actor2.resources[self.food.kind].quantity, 5)
     def test_gift(self):
        self.actor1.exchange(target = self.actor2, receive = None, give = self.food)
     def test_take(self):
