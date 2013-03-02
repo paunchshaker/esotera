@@ -52,3 +52,5 @@ class Actor:
         #go through AI to make decision, update AI here
         #for now just make a random choice
         return bool(random.randrange(2))
+    def take_turn(self):
+        print("{0} abides.".format(self.name))
