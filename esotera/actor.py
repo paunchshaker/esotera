@@ -39,6 +39,8 @@ class Actor:
                 target.resources[give.kind] += give
             except KeyError:
                 target.resources[give.kind] = copy.copy(give)
+        else:
+            give = "nothing"
         if receive:
             try:
                 self.resources[receive.kind] += receive
@@ -49,6 +51,9 @@ class Actor:
             except KeyError:
                 target.resources[receive.kind] = Resource(receive.kind, 0)
                 target.resources[receive.kind] -= receive
+        else:
+            receive = "nothing"
+        print( "{0} gave {1} {2} in exchange for {3}.".format(self.name, target.name, give, receive))
     def accept(self, source, give, receive):
         """Decide whether to accept or reject an offer"""
         #go through AI to make decision, update AI here
@@ -64,7 +69,7 @@ class Actor:
         """Take a turn in the Game"""
         
         #pick an actor at random
-        actor = random.choice( actors )
+        actor = random.choice( [other_actor for other_actor in actors if other_actor is not self] )
         
         #make an offer at random
         to_give = None
