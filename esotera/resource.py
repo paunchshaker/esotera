@@ -78,3 +78,6 @@ class Resource:
         #Note that this allows negative resource quantities. Do we want to 
         #do this? It could be useful.
         return Resource(self.kind, self.quantity // value)
+
+    def __str__(self):
+        return "{0} {1}".format(self.quantity, self.kind)
