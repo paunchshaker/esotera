@@ -64,7 +64,7 @@ class Actor:
         """Return a list of the available (non-zero) resources for exchange"""
         available = []
         if self.resources:
-            available = [ res for res in self.resources.values() if res != 0]
+            available = [ res for res in self.resources.values() if res.quantity > 0]
         return available
     def take_turn(self, actors, resources):
         """Take a turn in the Game"""
