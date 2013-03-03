@@ -53,40 +53,42 @@ class Actor:
                 target.resources[receive.kind] -= receive
         else:
             receive = "nothing"
-        print( "{0} gave {1} {2} in exchange for {3}.".format(self.name, target.name, give, receive))
+        exchange_text = "{0} gave {1} {2} in exchange for {3}."
+        print( exchange_text.format(self.name, target.name, give, receive))
     def accept(self, source, give, receive):
         """Decide whether to accept or reject an offer"""
         #go through AI to make decision, update AI here
         #for now just make a random choice
         return random.choice( [True, False] )
     def available_resources(self):
-        available_resources = []
+        """Return a list of the available (non-zero) resources for exchange"""
+        available = []
         if self.resources:
-            available_resources = [ res for res in self.resources.values() if res != 0]
-        return available_resources
-
+            available = [ res for res in self.resources.values() if res != 0]
+        return available
     def take_turn(self, actors, resources):
         """Take a turn in the Game"""
         
         #pick an actor at random
-        actor = random.choice( [other_actor for other_actor in actors if other_actor is not self] )
+        available_actors = [ act for act in actors if act is not self]
+        actor = random.choice(available_actors)
         
         #make an offer at random
         to_give = None
         if self.available_resources():
-            resource_to_give = random.choice(self.available_resources())
+            res_to_give = random.choice(self.available_resources())
             amount_to_give = 1
-            if resource_to_give.quantity > 1:
-                amount_to_give = random.randrange(1,resource_to_give.quantity)
-            to_give = Resource( kind = resource_to_give.kind, quantity = amount_to_give)
+            if res_to_give.quantity > 1:
+                amount_to_give = random.randrange(1, res_to_give.quantity)
+            to_give = Resource( kind = res_to_give.kind, quantity = amount_to_give)
 
         to_take = None
         if actor.available_resources():
-            resource_to_take = random.choice(actor.available_resources())
+            res_to_take = random.choice(actor.available_resources())
             amount_to_take = 1
-            if resource_to_take.quantity > 1:
-                amount_to_take = random.randrange(1, resource_to_take.quantity)
-            to_take = Resource( kind = resource_to_take.kind, quantity = amount_to_take)
+            if res_to_take.quantity > 1:
+                amount_to_take = random.randrange(1, res_to_take.quantity)
+            to_take = Resource( kind = res_to_take.kind, quantity = amount_to_take)
         
         if to_give or to_take:
             self.offer( target = actor, give = to_give, receive = to_take)
