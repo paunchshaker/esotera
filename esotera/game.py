@@ -16,11 +16,14 @@ class Game:
     
     def new_game(self, number_actors = 5, number_turns = 10):
         """Populates the game world and start the game"""
-        for x in range(number_actors):
+        x = 0
+        while x < number_actors:
             actor_resources = {}
-            for resource_type in ['money', 'food', 'influence', 'shelter']:
-                actor_resources[resource_type] = Resource( resource_type, random.randrange(1,25))
+            for res_type in ['money', 'food', 'influence', 'shelter']:
+                amount = random.randrange(1, 25)
+                actor_resources[res_type] = Resource( res_type, amount)
             self.actors.append( Actor(resources = actor_resources) )
+            x += 1
         self.start(number_turns)
 
     def start(self, turns = None):
