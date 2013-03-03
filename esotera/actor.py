@@ -92,3 +92,5 @@ class Actor:
             self.offer( target = actor, give = to_give, receive = to_take)
         else:
             print("{0} abides.".format(self.name))
+    def __str__(self):
+        return "{0} (has {1})".format( self.name, ", ".join( [str(res) for res in self.resources.values()] ) )

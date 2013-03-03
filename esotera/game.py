@@ -26,9 +26,14 @@ class Game:
     def start(self, turns = None):
         """Start the game."""
         self.turn = 0
+        #display starting actors and their resources
+        for actor in self.actors:
+            print(str(actor))
         while turns == None or self.turn < turns:
             self.turn += 1
             for actor in self.actors:
                 actor.take_turn(self.actors, self.resources)
             print("Turn {0} complete!".format(str(self.turn)))
+        for actor in self.actors:
+            print(str(actor))
 
