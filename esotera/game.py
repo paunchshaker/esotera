@@ -1,3 +1,4 @@
+"""This module contains basic code for running the game simulation"""
 from collections import deque
 from esotera.actor import Actor
 from esotera.resource import Resource
@@ -16,14 +17,14 @@ class Game:
     
     def new_game(self, number_actors = 5, number_turns = 10):
         """Populates the game world and start the game"""
-        x = 0
-        while x < number_actors:
+        current_turn = 0
+        while current_turn < number_actors:
             actor_resources = {}
             for res_type in ['money', 'food', 'influence', 'shelter']:
                 amount = random.randrange(1, 25)
                 actor_resources[res_type] = Resource( res_type, amount)
             self.actors.append( Actor(resources = actor_resources) )
-            x += 1
+            current_turn += 1
         self.start(number_turns)
 
     def start(self, turns = None):
