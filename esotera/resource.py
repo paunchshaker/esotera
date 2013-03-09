@@ -81,3 +81,12 @@ class Resource:
 
     def __str__(self):
         return "{0} {1}".format(self.quantity, self.kind)
+
+    def __hash__(self):
+        return self.kind.__hash__() ^ self.__class__.__name__.__hash__()
+
+    def __eq__(self, other):
+        return self.kind == other.kind
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
