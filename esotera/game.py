@@ -1,8 +1,8 @@
 """This module contains basic code for running the game simulation"""
+
 from collections import deque
 from esotera.actor import Actor
 from esotera.resource import Resource
-from esotera.event import Event
 import random
 
 class Game:
