@@ -26,28 +26,28 @@ class TestEvent(TestCase):
         acceptor = Actor('YesMan')
         acceptor.accept = Mock(return_value=True)
         self.actor1.offer(target = acceptor, give = self.money, receive = self.food) 
-        self.assertEqual(self.actor1.resources[self.money.kind].quantity, -25)
-        self.assertEqual(self.actor1.resources[self.food.kind].quantity, 5)
-        self.assertEqual(acceptor.resources[self.money.kind].quantity, 25)
-        self.assertEqual(acceptor.resources[self.food.kind].quantity, -5)
+        self.assertEqual(self.actor1.resources[self.money].quantity, -25)
+        self.assertEqual(self.actor1.resources[self.food].quantity, 5)
+        self.assertEqual(acceptor.resources[self.money].quantity, 25)
+        self.assertEqual(acceptor.resources[self.food].quantity, -5)
     def test_exchange(self):
         self.actor1.exchange(target = self.actor2, receive = self.money, give = self.food)
-        self.assertEqual(self.actor1.resources[self.money.kind].quantity, 25)
-        self.assertEqual(self.actor1.resources[self.food.kind].quantity, -5)
-        self.assertEqual(self.actor2.resources[self.money.kind].quantity, -25)
-        self.assertEqual(self.actor2.resources[self.food.kind].quantity, 5)
+        self.assertEqual(self.actor1.resources[self.money].quantity, 25)
+        self.assertEqual(self.actor1.resources[self.food].quantity, -5)
+        self.assertEqual(self.actor2.resources[self.money].quantity, -25)
+        self.assertEqual(self.actor2.resources[self.food].quantity, 5)
     def test_gift(self):
         self.actor1.exchange(target = self.actor2, receive = None, give = self.food)
-        self.assertEqual(self.actor1.resources[self.food.kind].quantity, -5)
-        self.assertEqual(self.actor2.resources[self.food.kind].quantity, 5)
+        self.assertEqual(self.actor1.resources[self.food].quantity, -5)
+        self.assertEqual(self.actor2.resources[self.food].quantity, 5)
         with self.assertRaises(KeyError):
-            self.actor1.resources[self.money.kind].quantity
+            self.actor1.resources[self.money].quantity
     def test_take(self):
         self.actor1.exchange(target = self.actor2, receive = self.money, give = None)
-        self.assertEqual(self.actor1.resources[self.money.kind].quantity, 25)
-        self.assertEqual(self.actor2.resources[self.money.kind].quantity, -25)
+        self.assertEqual(self.actor1.resources[self.money].quantity, 25)
+        self.assertEqual(self.actor2.resources[self.money].quantity, -25)
         with self.assertRaises(KeyError):
-            self.actor1.resources[self.food.kind].quantity = 1
+            self.actor1.resources[self.food].quantity = 1
     def test_accept(self):
         #not sure of an appropriate test here since it will ultimately be probabilistic
         #just check you get true or false

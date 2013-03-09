@@ -31,26 +31,27 @@ class Actor:
         #exchange resources here
         if give:
             try:
-                self.resources[give.kind] -= give
+                self.resources[give] -= give
             except KeyError:
-                self.resources[give.kind] = Resource(give.kind, 0)
-                self.resources[give.kind] -= give
+                self.resources[give] = copy.copy(give)
+                self.resources[give].quantity = 0
+                self.resources[give] -= give
             try:
-                target.resources[give.kind] += give
+                target.resources[give] += give
             except KeyError:
-                target.resources[give.kind] = copy.copy(give)
+                target.resources[give] = copy.copy(give)
         else:
             give = "nothing"
         if receive:
             try:
-                self.resources[receive.kind] += receive
+                self.resources[receive] += receive
             except KeyError:
-                self.resources[receive.kind] = copy.copy(receive)
+                self.resources[receive] = copy.copy(receive)
             try:
-                target.resources[receive.kind] -= receive
+                target.resources[receive] -= receive
             except KeyError:
-                target.resources[receive.kind] = Resource(receive.kind, 0)
-                target.resources[receive.kind] -= receive
+                target.resources[receive] = Resource(receive.kind, 0)
+                target.resources[receive] -= receive
         else:
             receive = "nothing"
         exchange_text = "{0} gave {1} {2} in exchange for {3}."
