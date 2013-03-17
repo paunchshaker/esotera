@@ -1,3 +1,4 @@
+"""This module contains code for a generic Actor class"""
 import random
 import copy
 from esotera.resource import Resource
@@ -10,7 +11,8 @@ class Actor:
     #class variables 
     number = 0
 
-    def __init__(self, name = None, resources = dict(), needs = dict(), wants = dict()):
+    def __init__(self, name = None, resources = dict(), 
+                 needs = dict(), wants = dict()):
         """Initialize a new Actor."""
         if name:
             self.name = name
@@ -20,7 +22,8 @@ class Actor:
             self.name = "Actor" + str(Actor.number)
         #the following are resources the Actor has in its possession    
         self.resources = dict(resources)
-        #the following are resources essential to the continued existence of the Actor
+        #the following are resources essential to the continued 
+        #existence of the Actor
         self.needs = dict(needs)
         #the following are resources the Actor desires, but does not need
         self.wants = dict(wants)
@@ -69,14 +72,16 @@ class Actor:
         return random.choice( [True, False] )
     def available_resources(self):
         """Return a list of the available (non-zero) resources for exchange"""
-        available = [ res for res in self.resources.values() if res.quantity > 0 ]
+        available = [ res for res in self.resources.values()
+                      if res.quantity > 0 ]
         return available
     def desired_resources(self):
         """Return a (ranked) list of the resources the Actor desires"""
         desired = [ res for res in self.needs.values() if res.quantity > 0 ] 
-        desired.extend([ res for res in self.wants.values() if res.quantity > 0 ])
+        desired.extend([ res for res in self.wants.values()
+                         if res.quantity > 0 ])
         return desired
-    def take_turn(self, actors, resources):
+    def take_turn(self, actors):
         """Take a turn in the Game"""
         
         #pick an actor at random
@@ -90,7 +95,8 @@ class Actor:
             amount_to_give = 1
             if res_to_give.quantity > 1:
                 amount_to_give = random.randrange(1, res_to_give.quantity)
-            to_give = Resource( kind = res_to_give.kind, quantity = amount_to_give)
+            to_give = Resource( kind = res_to_give.kind, 
+                                quantity = amount_to_give )
 
         to_take = None
         if actor.available_resources():
@@ -98,11 +104,13 @@ class Actor:
             amount_to_take = 1
             if res_to_take.quantity > 1:
                 amount_to_take = random.randrange(1, res_to_take.quantity)
-            to_take = Resource( kind = res_to_take.kind, quantity = amount_to_take)
+            to_take = Resource( kind = res_to_take.kind, 
+                                quantity = amount_to_take )
         
         if to_give or to_take:
             self.offer( target = actor, give = to_give, receive = to_take)
         else:
             print("{0} abides.".format(self.name))
     def __str__(self):
-        return "{0} (has {1})".format( self.name, ", ".join( [str(res) for res in self.resources.values()] ) )
+        resources_had = [ str(res) for res in self.resources.values() ]
+        return "{0} (has {1})".format( self.name, ", ".join( resources_had ) )
