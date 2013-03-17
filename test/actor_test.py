@@ -12,16 +12,35 @@ class TestEvent(TestCase):
         self.actor2 = Actor('Cleese')
         self.food = Resource('food', 5)
         self.money = Resource('money', 25)
+
+        resources = {self.food : self.food}
+        wants = {self.money : self.money}
+        needs = {self.food : self.food}
+        self.actor3 = Actor('Cleese', resources, needs, wants)
     def test_creation_with_no_name(self):
         self.assertNotEqual(self.actor1.name, None)
         self.assertFalse(self.actor1.resources)
+        self.assertFalse(self.actor1.needs)
+        self.assertFalse(self.actor1.wants)
     def test_creation_with_name(self):
         self.assertEqual(self.actor2.name, 'Cleese')
         self.assertFalse(self.actor2.resources)
+        self.assertFalse(self.actor2.needs)
+        self.assertFalse(self.actor2.wants)
     def test_creation_with_name_and_resources(self):
-        resources = {self.food.kind : self.food}
+        resources = {self.food : self.food}
         actor = Actor('Cleese', resources)
         self.assertDictEqual(actor.resources, resources)
+        self.assertFalse(actor.needs)
+        self.assertFalse(actor.wants)
+    def test_creation_with_name_and_all_resources(self):
+        resources = {self.food : self.food}
+        wants = {self.money : self.money}
+        needs = {self.food : self.food}
+        actor = Actor('Cleese', resources, needs, wants)
+        self.assertDictEqual(actor.resources, resources)
+        self.assertDictEqual(actor.needs, needs)
+        self.assertDictEqual(actor.wants, wants)
     def test_offer_accept(self):
         acceptor = Actor('YesMan')
         acceptor.accept = Mock(return_value=True)
@@ -53,3 +72,11 @@ class TestEvent(TestCase):
         #just check you get true or false
         ret = self.actor2.accept(source = self.actor1, receive = self.money, give = self.food)
         self.assertIn(ret, [True, False])
+    def test_available_resources(self):
+        expected = [ self.food ]
+        self.assertListEqual(self.actor3.available_resources(), expected)
+    def test_desired_resources(self):
+        expected = [ self.food, self.money ]
+        self.assertListEqual(self.actor3.desired_resources(), expected)
+
+        

@@ -10,14 +10,20 @@ class Actor:
     #class variables 
     number = 0
 
-    def __init__(self, name = None, resources = dict()):
+    def __init__(self, name = None, resources = dict(), needs = dict(), wants = dict()):
         """Initialize a new Actor."""
         if name:
             self.name = name
         else:
             Actor.number += 1
+            #set the default name to just be the number of the actor created
             self.name = "Actor" + str(Actor.number)
+        #the following are resources the Actor has in its possession    
         self.resources = dict(resources)
+        #the following are resources essential to the continued existence of the Actor
+        self.needs = dict(needs)
+        #the following are resources the Actor desires, but does not need
+        self.wants = dict(wants)
     def offer(self, target, give, receive):
         """Offer an exchange (possibly one-sided) of resources."""
         accepts = target.accept(source = self, give = receive, receive = give)
@@ -63,10 +69,13 @@ class Actor:
         return random.choice( [True, False] )
     def available_resources(self):
         """Return a list of the available (non-zero) resources for exchange"""
-        available = []
-        if self.resources:
-            available = [ res for res in self.resources.values() if res.quantity > 0]
+        available = [ res for res in self.resources.values() if res.quantity > 0 ]
         return available
+    def desired_resources(self):
+        """Return a (ranked) list of the resources the Actor desires"""
+        desired = [ res for res in self.needs.values() if res.quantity > 0 ] 
+        desired.extend([ res for res in self.wants.values() if res.quantity > 0 ])
+        return desired
     def take_turn(self, actors, resources):
         """Take a turn in the Game"""
         
