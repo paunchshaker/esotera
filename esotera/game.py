@@ -15,14 +15,15 @@ class Game:
         self.resources = list()
         self.turn = 0
     
-    def new_game(self, number_actors = 5, number_turns = 10):
+    def new_game(self, number_actors = 5, number_turns = None):
         """Populates the game world and start the game"""
         current_turn = 0
         while current_turn < number_actors:
             actor_resources = {}
             for res_type in ['money', 'food', 'influence', 'shelter']:
                 amount = random.randrange(1, 25)
-                actor_resources[res_type] = Resource( res_type, amount)
+                res = Resource( res_type, amount)
+                actor_resources[res] = res
             self.actors.append( Actor(resources = actor_resources) )
             current_turn += 1
         self.start(number_turns)
@@ -38,6 +39,12 @@ class Game:
             for actor in self.actors:
                 actor.take_turn(self.actors)
             print("Turn {0} complete!".format(str(self.turn)))
-        for actor in self.actors:
-            print(str(actor))
+            command = input("Press enter for next turn, type p to print actors, or type q to end: ")
+            command = command.strip().lower()
+            if command == "p":
+                for actor in self.actors:
+                    print(str(actor))
+                input()
+            elif command == "q":
+                break
 
