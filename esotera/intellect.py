@@ -14,6 +14,7 @@ class Intellect(GameObject):
         actor.intellect = self
 
     def accept(self, source, give, receive):
+        """Decide whether or not to accept a proposed offer"""
         return random.choice( [True, False] )
 
     def take_turn(self):
