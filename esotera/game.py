@@ -2,7 +2,9 @@
 
 from collections import deque
 from esotera.actor import Actor
+from esotera.intellect import Intellect
 from esotera.resource import Resource
+from esotera.game_object import GameObject
 import random
 
 class Game:
@@ -14,6 +16,7 @@ class Game:
         self.actors = list()
         self.resources = list()
         self.turn = 0
+        GameObject.game = self
     
     def new_game(self, number_actors = 5, number_turns = None):
         """Populates the game world and start the game"""
@@ -24,7 +27,9 @@ class Game:
                 amount = random.randrange(1, 25)
                 res = Resource( res_type, amount)
                 actor_resources[res] = res
-            self.actors.append( Actor(resources = actor_resources) )
+            new_actor = Actor(resources = actor_resources)
+            new_intellect = Intellect(new_actor)
+            self.actors.append(new_actor)
             current_turn += 1
         self.start(number_turns)
 
@@ -37,7 +42,7 @@ class Game:
         while turns == None or self.turn < turns:
             self.turn += 1
             for actor in self.actors:
-                actor.take_turn(self.actors)
+                actor.take_turn()
             print("Turn {0} complete!".format(str(self.turn)))
             command = input("Press enter for next turn, type p to print actors, or type q to end: ")
             command = command.strip().lower()

@@ -2,8 +2,10 @@
 import random
 import copy
 from esotera.resource import Resource
+from esotera.intellect import Intellect
+from esotera.game_object import GameObject
 
-class Actor:
+class Actor(GameObject):
     """The actor class is the base class for entities that can perform actions.
     They are not necessarily organic (i.e. they might represent political,
     religious or social bodies)."""
@@ -12,8 +14,7 @@ class Actor:
     number = 0
 
     def __init__(self, name = None, resources = dict(), 
-                 needs = dict(), wants = dict(),
-                 intellect = None):
+                 needs = dict(), wants = dict()):
         """Initialize a new Actor."""
         if name:
             self.name = name
@@ -29,7 +30,9 @@ class Actor:
         #the following are resources the Actor desires, but does not need
         self.wants = dict(wants)
         #the intellect is the AI controlling the actor's behaviour
-        self.intellect = intellect
+        #this seems odd, but intellects take control of their actor when
+        #they are created
+        self.intellect = None 
     def offer(self, target, give, receive):
         """Offer an exchange (possibly one-sided) of resources."""
         accepts = target.accept(source = self, give = receive, receive = give)
@@ -72,7 +75,7 @@ class Actor:
         """Decide whether to accept or reject an offer"""
         #go through AI to make decision, update AI here
         if self.intellect:
-            return self.intellect(source, give, receive)
+            return self.intellect.accept(source, give, receive)
         else:
             return random.choice( [True, False] )
     def available_resources(self):
@@ -86,36 +89,13 @@ class Actor:
         desired.extend([ res for res in self.wants.values()
                          if res.quantity > 0 ])
         return desired
-    def take_turn(self, actors):
+    def take_turn(self):
         """Take a turn in the Game"""
         
-        #pick an actor at random
-        available_actors = [ act for act in actors if act is not self]
-        actor = random.choice(available_actors)
-        
-        #make an offer at random
-        to_give = None
-        if self.available_resources():
-            res_to_give = random.choice(self.available_resources())
-            amount_to_give = 1
-            if res_to_give.quantity > 1:
-                amount_to_give = random.randrange(1, res_to_give.quantity)
-            to_give = Resource( kind = res_to_give.kind, 
-                                quantity = amount_to_give )
-
-        to_take = None
-        if actor.available_resources():
-            res_to_take = random.choice(actor.available_resources())
-            amount_to_take = 1
-            if res_to_take.quantity > 1:
-                amount_to_take = random.randrange(1, res_to_take.quantity)
-            to_take = Resource( kind = res_to_take.kind, 
-                                quantity = amount_to_take )
-        
-        if to_give or to_take:
-            self.offer( target = actor, give = to_give, receive = to_take)
+        if self.intellect:
+            self.intellect.take_turn()
         else:
-            print("{0} abides.".format(self.name))
+            print("{0} mindlessly abides.".format(self.name))
     def __str__(self):
         resources_had = [ str(res) for res in self.resources.values() ]
         return "{0} (has {1})".format( self.name, ", ".join( resources_had ) )
