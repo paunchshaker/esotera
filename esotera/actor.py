@@ -12,7 +12,8 @@ class Actor:
     number = 0
 
     def __init__(self, name = None, resources = dict(), 
-                 needs = dict(), wants = dict()):
+                 needs = dict(), wants = dict(),
+                 intellect = None):
         """Initialize a new Actor."""
         if name:
             self.name = name
@@ -27,6 +28,8 @@ class Actor:
         self.needs = dict(needs)
         #the following are resources the Actor desires, but does not need
         self.wants = dict(wants)
+        #the intellect is the AI controlling the actor's behaviour
+        self.intellect = intellect
     def offer(self, target, give, receive):
         """Offer an exchange (possibly one-sided) of resources."""
         accepts = target.accept(source = self, give = receive, receive = give)
@@ -68,8 +71,10 @@ class Actor:
     def accept(self, source, give, receive):
         """Decide whether to accept or reject an offer"""
         #go through AI to make decision, update AI here
-        #for now just make a random choice
-        return random.choice( [True, False] )
+        if self.intellect:
+            return self.intellect(source, give, receive)
+        else:
+            return random.choice( [True, False] )
     def available_resources(self):
         """Return a list of the available (non-zero) resources for exchange"""
         available = [ res for res in self.resources.values()
